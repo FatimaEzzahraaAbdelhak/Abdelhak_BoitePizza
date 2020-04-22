@@ -5,7 +5,7 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class Produit extends Model
+class Commentaire extends Model
 {
     use CrudTrait;
 
@@ -15,7 +15,7 @@ class Produit extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'produits';
+    protected $table = 'commentaires';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
@@ -34,14 +34,14 @@ class Produit extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function category()
+    public function client()
     {
-        return $this->belongsTo('App\Models\Categories', 'category_id');
+        return $this->belongsTo('App\Models\Client', 'client_id');
     }
 
-    public function commentaire()
+    public function produit()
     {
-        return $this->hasMany('App\Models\Commentaire', 'id');
+        return $this->belongsTo('App\Models\Produit', 'produit_id');
     }
     /*
     |--------------------------------------------------------------------------
