@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\ProduitRequest;
+use App\Http\Requests\ProduitUpdateRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+
+
 
 /**
  * Class ProduitCrudController
@@ -57,39 +60,146 @@ class ProduitCrudController extends CrudController
         'type' => 'text',
         'label' => 'Category'
     ];
+   
     $this->crud->addColumns([$f1, $f2, $f3, $f4, $f5]);
     }
 
     protected function setupCreateOperation()
     {
-        $this->crud->addField([
-            'label' => "ImgPath",
-            'name' => "imgPath",
-            'type' => 'image',
-            'upload' => true,
-            'crop' => true, // set to true to allow cropping, false to disable
-            'aspect_ratio' => 1, ]);
-            CRUD::addField([  // Select2
-                'label'     => 'Category',
-                'type'      => 'select2',
-                'name'      => 'category_id', // the db column for the foreign key
-                'entity'    => 'category', // the method that defines the relationship in your Model
-                'attribute' => 'nomCat', // foreign key attribute that is shown to user
-                // 'wrapperAttributes' => [
-                //     'class' => 'form-group col-md-6'
-                //   ], // extra HTML attributes for the field wrapper - mostly for resizing fields
-            ]);
-            
         $this->crud->setValidation(ProduitRequest::class);
+        $f1 = [
+            'name' => 'imgPath',
+            'type' => 'image',
+            'label' => 'Image',
+            'prefix' => 'storage/',
+            'height' => '300px'
+        ];
 
+        $f2 = [
+            'name' => 'nom',
+            'type' => 'text',
+            'label' => 'Nom',
+        ];
+        $f3 = [
+            'name' => 'prix',
+            'label' => 'Prix',
+            'type' => 'text',
+        ];
+        $f4 = [
+            'name' => 'remise',
+            'type' => 'text',
+            'label' => 'Remise',
+        ];
+        $f5 = [
+            'name' => 'date_debut',
+            'type' => 'date',
+            'label' => 'Date debut',
+        ];
+        $f6 = [
+            'name' => 'date_fin',
+            'type' => 'date',
+            'label' => 'Date in',
+        ];
+        $f7 = [
+            'name' => 'isPromo',
+            'type' => 'boolean',
+            'label' => 'In promo',
+        ];
+        $f8 = [
+            'label'     => 'Category',
+            'type'      => 'select2',
+            'name'      => 'category_id', // the db column for the foreign key
+            'entity'    => 'category',
+            'attribute' => 'nomCat', // foreign key attribute that is shown to user
+            // 'wrapperAttributes' => [
+            //     'class' => 'form-group col-md-6'
+            //   ], // extra HTML attributes for the field wrapper - mostly for resizing fields
+            'tab' => 'Category',
+        ];
+        
+        $f9 =[ // n-n relationship (with pivot table)
+            'label'     => 'Element de base', // Table column heading
+            'type'      => 'checklist',
+            'name'      => 'element', // the method that defines the relationship in your Model
+            'entity'    => 'element', // the method that defines the relationship in your Model
+            'attribute' => 'nomElem', // foreign key attribute that is shown to user
+            'model'     => 'App\Models\element',
+            'pivot'            => true, // on create&update, do you need to add/delete pivot table entries?]
+            'number_columns'   => 3, //can be 1,2,3,4,6 // foreign key model
+        ];
+        
+        $this->crud->addFields([$f1, $f2, $f3, $f4, $f5, $f6, $f7, $f8,$f9]);
         // TODO: remove setFromDb() and manually define Fields
-        $this->crud->setFromDb();
-
-       
+        //$this->crud->setFromDb();
     }
 
     protected function setupUpdateOperation()
     {
-        $this->setupCreateOperation();
+        $this->crud->setValidation(ProduitRequest::class);
+        $f1 = [
+            'name' => 'imgPath',
+            'type' => 'image',
+            'label' => 'Image',
+            'prefix' => 'storage/',
+            'height' => '300px'
+        ];
+
+        $f2 = [
+            'name' => 'nom',
+            'type' => 'text',
+            'label' => 'Nom',
+        ];
+        $f3 = [
+            'name' => 'prix',
+            'label' => 'Prix',
+            'type' => 'text',
+        ];
+        $f4 = [
+            'name' => 'remise',
+            'type' => 'text',
+            'label' => 'Remise',
+        ];
+        $f5 = [
+            'name' => 'date_debut',
+            'type' => 'date',
+            'label' => 'Date debut',
+        ];
+        $f6 = [
+            'name' => 'date_fin',
+            'type' => 'date',
+            'label' => 'Date in',
+        ];
+        $f7 = [
+            'name' => 'isPromo',
+            'type' => 'boolean',
+            'label' => 'In promo',
+        ];
+        $f8 = [
+            'label'     => 'Category',
+            'type'      => 'select2',
+            'name'      => 'category_id', // the db column for the foreign key
+            'entity'    => 'category',
+            'attribute' => 'nomCat', // foreign key attribute that is shown to user
+            // 'wrapperAttributes' => [
+            //     'class' => 'form-group col-md-6'
+            //   ], // extra HTML attributes for the field wrapper - mostly for resizing fields
+            'tab' => 'Category',
+        ];
+
+        $f9 =[ // n-n relationship (with pivot table)
+            'label'     => 'Element de base', // Table column heading
+            'type'      => 'checklist',
+            'name'      => 'element', // the method that defines the relationship in your Model
+            'entity'    => 'element', // the method that defines the relationship in your Model
+            'attribute' => 'nomElem', // foreign key attribute that is shown to user
+            'model'     => 'App\Models\element',
+            'pivot'            => true, // on create&update, do you need to add/delete pivot table entries?]
+            'number_columns'   => 3, //can be 1,2,3,4,6 // foreign key model
+        ];
+        
+        $this->crud->addFields([$f1, $f2, $f3, $f4, $f5, $f6, $f7, $f8,$f9]);
+
+        // TODO: remove setFromDb() and manually define Fields
+        //$this->crud->setFromDb();
     }
 }
